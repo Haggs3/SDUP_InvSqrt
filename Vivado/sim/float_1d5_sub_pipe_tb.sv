@@ -4,34 +4,51 @@ module float_1d5_sub_pipe_tb(
 
 );
 
-real out, in;
-reg clk, rst, ce;
-reg [31:0] fp_in;
-wire [30:0] y1, float_out;
+real out, out_expected;
+logic clk, rst, valid, ready, error_in, error_out;
+logic [31:0] float_in;
+logic [30:0] float_out, float_out_delay;
 
-//Instantiation
-fp_sub_1d5_pipe fp_sub_1d5_pipeTB(clk, ce, rst, fp_in[30:0], 0, float_out, y1);
-//ce & clock generator stimuli
+logic [31:0] float_out_expected;
+logic [67:0] testvectors [11:0];
+logic [31:0] vecnum;
+logic [3:0] error_4b;
+integer f;
+
+
+fp_sub_1d5_pipe fp_sub_1d5_pipeTB(clk, valid, float_in[30:0], 0, float_out, float_out_delay, ready, error_in, error_out);
+
 initial
 begin
-    ce = 0;
+    $readmemh("C:/Users/LB197/Desktop/project_sqrt_test/sub_pipe_in.tv", testvectors);
+    f = $fopen("C:/Users/LB197/Desktop/project_sqrt_test/sub_pipe_out.txt","w");
+    vecnum <= 0;
+    valid <= 0;
     clk <= 1'b1;
-    in = 0.4;
-    fp_in = $shortrealtobits(in);
-    rst = 1'b1;
-    #10
-    rst = 1'b0;
+    error_in <= 1'b0;
+    float_in <= 0;
+    rst <= 1'b0;
     #5
-    ce = 1'b1;
+    valid = 1'b1;
 end
-always
+
+always begin
+    out <= $bitstoshortreal({1'b0, float_out});
+    out_expected = $bitstoshortreal(float_out_expected);
     #5 clk <= ~clk;
+end
 
 always@(posedge clk)
 begin
-    in = in + 0.01;
-    fp_in = $shortrealtobits(in);
-    out <= $bitstoshortreal({1'b0, float_out});
+    {float_in, float_out_expected, error_4b} = testvectors[vecnum];
+    vecnum = vecnum + 1;
+    error_in <= error_4b[0];
+    $fwrite(f,"%h\n",float_out);
+    
+    if (vecnum == 16) begin
+       $fclose(f);
+       $stop;
+    end
 end
     
 endmodule

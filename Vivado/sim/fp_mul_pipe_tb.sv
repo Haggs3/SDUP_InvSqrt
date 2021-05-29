@@ -4,40 +4,49 @@ module float_mul_pipe_tb(
 
 );
 
-real out, in1, in2;
-reg clk, rst, ce;
-reg [31:0] fp_in_1, fp_in_2;
-wire [30:0] y1, float_out;
+real out, out_expected;
+logic clk, valid, ready, error_in, error_out;
+logic [31:0] float_in_1, float_in_2;
+logic [30:0] float_out, float_out_delay;
 
-//Instantiation
-fp_mul_pipe fp_mulTB (clk, ce, rst, fp_in_1[30:0], fp_in_2[30:0], float_out, y1[30:0]);
-//ce & clock generator stimuli
+logic [31:0] float_out_exp;
+logic [99:0] testvectors [11:0];
+logic [31:0] vecnum;
+logic [3:0] error_4b;
+integer f;
+
+fp_mul_pipe #(1) float_mul_pipe_TB(clk, valid, float_in_1, float_in_2, float_out, float_out_delay, ready, error_in, error_out);
+
 initial
 begin
-    ce = 0;
+    $readmemh("C:/Users/LB197/Desktop/project_sqrt_test/mul_pipe_in.tv", testvectors);
+    f = $fopen("C:/Users/LB197/Desktop/project_sqrt_test/mul_pipe_out.txt","w");
+    vecnum <= 32'b0;
+    valid <= 1'b0;
+    error_in <= 1'b0;
+    float_in_1 <= 32'b0;
+    float_in_2 <= 32'b0;
     clk <= 1'b1;
-    in1 = 4.0;
-    in2 = 52.0;
-    fp_in_1 = $shortrealtobits(in1);
-    fp_in_2 = $shortrealtobits(in2);
-    rst = 1'b1;
-    #10
-    rst = 1'b0;
-    #5
-    ce = 1'b1;
+    #5;
+    valid = 1'b1;
 end
-always
+always begin
+    out = $bitstoshortreal(float_out);
+    out_expected = $bitstoshortreal($bitstoshortreal(float_in_1) * $bitstoshortreal(float_in_2));
     #5 clk <= ~clk;
+end
 
-    
 always@(posedge clk)
 begin
-    in1 = in1 + 1;
-    in2 = in2 + 5;
-    fp_in_1 = $shortrealtobits(in1);
-    fp_in_2 = $shortrealtobits(in2);
-    out <= $bitstoshortreal({1'b0, float_out});
+    {float_in_1 ,float_in_2, float_out_exp, error_4b} = testvectors[vecnum];
+    vecnum <= vecnum + 1;
+    error_in <= error_4b[0];
+    $fwrite(f,"%h\n",float_out);
     
-end
+    if (vecnum == 16) begin
+       $fclose(f);
+       $stop;
+    end   
+end  
     
 endmodule

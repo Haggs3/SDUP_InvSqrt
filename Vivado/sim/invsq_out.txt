@@ -1,0 +1,10 @@
+xxxxxxxx
+xxxxxxxx
+xxxxxxxx
+xxxxxxxx
+3fc10000
+3f000000
+3fc00001
+3f600000
+3f208a8c
+3fa00000

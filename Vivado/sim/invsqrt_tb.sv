@@ -9,17 +9,22 @@ logic clk, rst, start;
 logic [31:0] float_in;
 logic [31:0] float_out;
 logic ready;
-real x, in;
+real out, out_expected;
 
-//Instantiation
+logic [31:0] float_out_expected;
+logic [65:0] testvectors [9:0];
+logic [31:0] vecnum;
+integer f;
 
 invsqrt invsqrt_TB(clk, rst, start, float_in, float_out, ready);
-//ce & clock generator stimuli
+
 initial
 begin
+    $readmemh("C:/Users/LB197/Desktop/project_sqrt_test/invsq_in.tv", testvectors);
+    f = $fopen("C:/Users/LB197/Desktop/project_sqrt_test/invsq_out.txt","w");
     clk <= 1'b0;
-    in = 1;
-    float_in = $shortrealtobits(in);
+    vecnum <= 0;
+    float_in = 32'b0;
     start = 1'b0;
     rst = 1'b1;
     #100
@@ -31,16 +36,28 @@ begin
 end
 always begin
     #5 clk <= ~clk;
-    x = $bitstoshortreal(float_out);
+    out = $bitstoshortreal(float_out);
+    out_expected = $bitstoshortreal(float_out_expected);
 end
 
 always@(posedge ready)
 begin
-    in = in + 1;
-    float_in = $shortrealtobits(in);
     start = 1'b1;
     @(negedge ready);
     start = 1'b0;
+end
+
+always@(posedge start)
+begin
+    vecnum = vecnum + 1;
+    {float_in, float_out_expected} = testvectors[vecnum];
+    $fwrite(f,"%h\n",float_out);
+    
+    if (vecnum == 10) begin
+       $fclose(f);
+       $stop;
+    end
+    
 end
     
 endmodule
