@@ -41,7 +41,6 @@ always @(posedge clk)
     if(rst == 1'b1) begin
         float_out <= 32'b0;
         E <= 8'b0;
-//        E_sq2 <= 8'b0;
         M_sq_done <= 23'b0;
         M <= 23'b0;
         M_mul <= 48'b0;
@@ -51,7 +50,6 @@ always @(posedge clk)
     end else begin
         case(state)
             IDLE_SQ: begin
-//                E_sq2 <= E_sq << 1;
                 ready <= 1'b0;
                 if (start == 1'b1) begin
                     M_sq <= ({1'b1, M_in_sq} * {1'b1, M_in_sq});

@@ -8,22 +8,27 @@ input wire rst;
 input wire [31:0] float_in;
 
 output wire [31:0] float_out;
+
 output reg ready;
 
 wire [31:0] x2, y, mul_yyx2, sub_1d5_yyx2, fp;
 wire [22:0] M_in;
 wire [7:0] E_in_x2;
 wire rdy_1, rdy_2, rdy_3;
-
+wire [31:0] float_out_invsq;
+wire error;
 assign M_in = float_in[22:0];
 assign E_in_x2 = float_in[30:23] - 1;
 
 assign x2 = {1'b0, E_in_x2, M_in};
 assign y = 32'h5f3759df - (float_in >> 1);
 
-float_sq_mul  multiply_yyx2     (clk, rst, start, y,        x2, mul_yyx2,            rdy_1);
-float_sub_1d5 subtract_1d5_yyx2 (clk, rst, rdy_1, mul_yyx2, sub_1d5_yyx2,            rdy_2);
-float_mul     multiply_y_sub    (clk, rst, rdy_2, y,        sub_1d5_yyx2, float_out, rdy_3);
+assign error = ((float_in == 32'b0) || (float_in[30:23] == 8'hFF) || (float_in[31] == 1'b1)) ? 1'b1 : 1'b0;
+assign float_out = (error == 1'b0) ? float_out_invsq : 32'h7FFFFFFF;
+
+float_sq_mul  multiply_yyx2     (clk, rst, start, y,        x2, mul_yyx2,                  rdy_1);
+float_sub_1d5 subtract_1d5_yyx2 (clk, rst, rdy_1, mul_yyx2, sub_1d5_yyx2,                  rdy_2);
+float_mul     multiply_y_sub    (clk, rst, rdy_2, y,        sub_1d5_yyx2, float_out_invsq, rdy_3);
 
 always @(posedge clk)
     if(rst == 1'b1) begin
