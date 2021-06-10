@@ -16,7 +16,7 @@ wire signed [7:0] E_sq2;
 reg signed [7:0] E;
 wire [22:0] M_in_sq, M_in_mul, M_sq_trunc, M_mul_trunc;
 reg [22:0] M_sq_done, M;
-reg [47:0] M_mul, M_sq;
+reg [47:0] M_mul, M_sq, M_sq_of;
 reg [2:0] state;
 
 localparam IDLE_SQ = 3'b000,
@@ -45,6 +45,7 @@ always @(posedge clk)
         M <= 23'b0;
         M_mul <= 48'b0;
         M_sq <= 48'b0;
+        M_sq_of <= 48'b0;
         ready <= 1'b0;
         state <= IDLE_SQ;
     end else begin
@@ -59,19 +60,19 @@ always @(posedge clk)
             end
             OVERLOWSQ: begin
                 if (M_sq[47] == 1'b1) begin
-                    M_sq <= (M_sq >> 1);
+                    M_sq_of <= (M_sq >> 1);
                     E <= E_sq2 + E_mul + 1;
                 end else begin
-                    M_sq <= M_sq;
+                    M_sq_of <= M_sq;
                     E <= E_sq2 + E_mul;
                 end
                 state <= ROUNDSQ;
             end
             ROUNDSQ: begin
                 if(M_sq_trunc[22] == 1'b1)
-                    M_sq_done <= M_sq[45:23] + 1;
+                    M_sq_done <= M_sq_of[45:23] + 1;
                 else
-                    M_sq_done <= M_sq[45:23];
+                    M_sq_done <= M_sq_of[45:23];
                 state <= MUL;
             end
             MUL: begin

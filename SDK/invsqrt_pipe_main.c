@@ -133,15 +133,13 @@ int main()
 
 	for(u8 i = 0; i < ARRAY_LENGTH; i++) {
 		dma_input[i] = *((u32*)&test[i]);
-	}
-	for(u8 i = 0; i < ARRAY_LENGTH; i++) {
 		sw_results[i] = Q_rsqrt(test[i]);
 	}
 
 	SetupDMA(&AxiDma);
 	Xil_DCacheDisable();
 
-	/* Send a packet */
+	/* Send test vectors and receive results */
 	XAxiDma_SimpleTransfer(&AxiDma,(UINTPTR) hw_results, sizeof(u32)*ARRAY_LENGTH, XAXIDMA_DEVICE_TO_DMA);
 	XAxiDma_SimpleTransfer(&AxiDma,(UINTPTR) dma_input, sizeof(u32)*ARRAY_LENGTH, XAXIDMA_DMA_TO_DEVICE);
 
