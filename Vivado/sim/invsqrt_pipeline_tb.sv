@@ -15,9 +15,8 @@ logic [65:0] testvectors [12:0];
 logic [31:0] vecnum;
 integer f;
 
-//Instantiation
 invsqrt_pipeline invsqrt_pipelineTB(clk, ce, fp_in[31:0], float_out, ready);
-//ce & clock generator stimuli
+
 initial
 begin
     $readmemh("C:/Users/LB197/Desktop/project_sqrt_test/invsq_pipe_in.tv", testvectors);

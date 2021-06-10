@@ -10,7 +10,7 @@ logic [31:0] float_in;
 logic [30:0] float_out, float_out_delay;
 
 logic [31:0] float_out_expected;
-logic [67:0] testvectors [11:0];
+logic [67:0] testvectors [9:0];
 logic [31:0] vecnum;
 logic [3:0] error_4b;
 integer f;
@@ -45,7 +45,7 @@ begin
     error_in <= error_4b[0];
     $fwrite(f,"%h\n",float_out);
     
-    if (vecnum == 16) begin
+    if (vecnum == 14) begin
        $fclose(f);
        $stop;
     end

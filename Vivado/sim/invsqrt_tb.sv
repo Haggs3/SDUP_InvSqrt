@@ -1,6 +1,5 @@
 `timescale 1ns / 1ps
 
-
 module invsqrt_tb(
 
 );
@@ -12,7 +11,7 @@ logic ready;
 real out, out_expected;
 
 logic [31:0] float_out_expected;
-logic [65:0] testvectors [9:0];
+logic [65:0] testvectors [12:0];
 logic [31:0] vecnum;
 integer f;
 
@@ -53,7 +52,7 @@ begin
     {float_in, float_out_expected} = testvectors[vecnum];
     $fwrite(f,"%h\n",float_out);
     
-    if (vecnum == 10) begin
+    if (vecnum == 14) begin
        $fclose(f);
        $stop;
     end

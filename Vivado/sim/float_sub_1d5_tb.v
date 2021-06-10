@@ -27,11 +27,11 @@ begin
     clk <= 1'b1;
     start = 1'b0;
     rst = 1'b1;
-    #10
+    #5
     rst = 1'b0;
     #5
     start = 1'b1;
-    #10;
+    #5;
     start = 1'b0;
 end
 always begin
@@ -40,6 +40,7 @@ end
 
 always@(posedge ready)
 begin
+    vecnum = vecnum + 1;
     out = $bitstoshortreal(float_out);
     out_expected = $bitstoshortreal(float_out_expected);
     start = 1'b1;
@@ -49,7 +50,6 @@ end
 
 always@(posedge start)
 begin
-    vecnum = vecnum + 1;
     {float_in, float_out_expected} = testvectors[vecnum];
     $fwrite(f,"%h\n",float_out);
        

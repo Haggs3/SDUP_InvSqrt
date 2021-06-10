@@ -1,6 +1,5 @@
 `timescale 1ns / 1ps
 
-
 module float_sq_mul_tb(
 
 );
@@ -21,8 +20,8 @@ float_sq_mul float_sq_mul_TB(clk, rst, start, float_in_sq, float_in_mul, float_o
 
 initial
 begin
-    $readmemh("C:/Users/LB197/Desktop/project_sqrt_test/mul_in.tv", testvectors);
-    f = $fopen("C:/Users/LB197/Desktop/project_sqrt_test/mul_out.txt","w");
+    $readmemh("C:/Users/LB197/Desktop/project_sqrt_test/sq_mul_in.tv", testvectors);
+    f = $fopen("C:/Users/LB197/Desktop/project_sqrt_test/sq_mul_out.txt","w");
     vecnum <= 32'b0;
     clk <= 1'b1;
     float_in_sq <= 32'b0;
@@ -42,6 +41,7 @@ end
 
 always@(posedge ready)
 begin
+    vecnum = vecnum + 1;
     mul_module = $bitstoshortreal(float_out);
     mul_ideal = $bitstoshortreal($bitstoshortreal(float_in_sq) * $bitstoshortreal(float_in_sq) * $bitstoshortreal(float_in_mul));
     start = 1'b1;
@@ -51,7 +51,6 @@ end
 
 always@(posedge start)
 begin
-    vecnum = vecnum + 1;
     {float_in_sq ,float_in_mul, float_out_exp} = testvectors[vecnum];
     $fwrite(f,"%h\n",float_out);
     
