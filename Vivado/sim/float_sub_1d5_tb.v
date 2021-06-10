@@ -20,8 +20,10 @@ float_sub_1d5 float_sub_1d5(clk, rst, start, float_in, float_out, ready);
 
 initial
 begin
-    $readmemh("C:/Users/LB197/Desktop/project_sqrt_test/sub_in.tv", testvectors);
-    f = $fopen("C:/Users/LB197/Desktop/project_sqrt_test/sub_out.txt","w");
+//    $readmemh("C:/Users/LB197/Desktop/project_sqrt_test/sub_in.tv", testvectors);
+//    f = $fopen("C:/Users/LB197/Desktop/project_sqrt_test/sub_out.txt","w");
+    $readmemh("sub_in.tv", testvectors);
+    f = $fopen("sub_out.txt","w");
     float_in <= 32'b0;
     vecnum <= 32'b0;
     clk <= 1'b1;
@@ -53,7 +55,7 @@ begin
     {float_in, float_out_expected} = testvectors[vecnum];
     $fwrite(f,"%h\n",float_out);
        
-    if (vecnum == 10) begin
+    if (vecnum == 11) begin
        $fclose(f);
        $stop;
     end   

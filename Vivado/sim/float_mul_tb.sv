@@ -20,8 +20,10 @@ float_mul float_mul_TB(clk, rst, start, float_in_1, float_in_2, float_out, ready
 
 initial
 begin
-    $readmemh("C:/Users/LB197/Desktop/project_sqrt_test/mul_in.tv", testvectors);
-    f = $fopen("C:/Users/LB197/Desktop/project_sqrt_test/mul_out.txt","w");
+//    $readmemh("C:/Users/LB197/Desktop/project_sqrt_test/mul_in.tv", testvectors);
+//    f = $fopen("C:/Users/LB197/Desktop/project_sqrt_test/mul_out.txt","w");
+    $readmemh("mul_in.tv", testvectors);
+    f = $fopen("mul_out.txt","w");
     vecnum <= 32'b0;
     clk <= 1'b1;
     float_in_1 <= 32'b0;
@@ -54,7 +56,7 @@ begin
     {float_in_1 ,float_in_2, float_out_exp} = testvectors[vecnum];
     $fwrite(f,"%h\n",float_out);
     
-    if (vecnum == 12) begin
+    if (vecnum == 13) begin
        $fclose(f);
        $stop;
     end   

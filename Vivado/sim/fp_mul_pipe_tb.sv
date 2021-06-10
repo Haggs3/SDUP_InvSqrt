@@ -19,8 +19,10 @@ fp_mul_pipe #(1) float_mul_pipe_TB(clk, valid, float_in_1, float_in_2, float_out
 
 initial
 begin
-    $readmemh("C:/Users/LB197/Desktop/project_sqrt_test/mul_pipe_in.tv", testvectors);
-    f = $fopen("C:/Users/LB197/Desktop/project_sqrt_test/mul_pipe_out.txt","w");
+//    $readmemh("C:/Users/LB197/Desktop/project_sqrt_test/mul_pipe_in.tv", testvectors);
+//    f = $fopen("C:/Users/LB197/Desktop/project_sqrt_test/mul_pipe_out.txt","w");
+    $readmemh("mul_pipe_in.tv", testvectors);
+    f = $fopen("mul_pipe_out.txt","w");
     vecnum <= 32'b0;
     valid <= 1'b0;
     error_in <= 1'b0;

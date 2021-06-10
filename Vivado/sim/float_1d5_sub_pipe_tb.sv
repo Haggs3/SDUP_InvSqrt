@@ -20,8 +20,10 @@ fp_sub_1d5_pipe fp_sub_1d5_pipeTB(clk, valid, float_in[30:0], 0, float_out, floa
 
 initial
 begin
-    $readmemh("C:/Users/LB197/Desktop/project_sqrt_test/sub_pipe_in.tv", testvectors);
-    f = $fopen("C:/Users/LB197/Desktop/project_sqrt_test/sub_pipe_out.txt","w");
+//    $readmemh("C:/Users/LB197/Desktop/project_sqrt_test/sub_pipe_in.tv", testvectors);
+//    f = $fopen("C:/Users/LB197/Desktop/project_sqrt_test/sub_pipe_out.txt","w");
+    $readmemh("sub_pipe_in.tv", testvectors);
+    f = $fopen("sub_pipe_out.txt","w");
     vecnum <= 0;
     valid <= 0;
     clk <= 1'b1;

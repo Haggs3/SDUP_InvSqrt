@@ -19,8 +19,10 @@ invsqrt invsqrt_TB(clk, rst, start, float_in, float_out, ready);
 
 initial
 begin
-    $readmemh("C:/Users/LB197/Desktop/project_sqrt_test/invsq_in.tv", testvectors);
-    f = $fopen("C:/Users/LB197/Desktop/project_sqrt_test/invsq_out.txt","w");
+//    $readmemh("C:/Users/LB197/Desktop/project_sqrt_test/invsq_in.tv", testvectors);
+//    f = $fopen("C:/Users/LB197/Desktop/project_sqrt_test/invsq_out.txt","w");
+    $readmemh("invsq_in.tv", testvectors);
+    f = $fopen("invsq_out.txt","w");
     clk <= 1'b0;
     vecnum <= 0;
     float_in = 32'b0;

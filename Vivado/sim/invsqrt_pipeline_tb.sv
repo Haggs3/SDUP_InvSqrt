@@ -19,8 +19,10 @@ invsqrt_pipeline invsqrt_pipelineTB(clk, ce, fp_in[31:0], float_out, ready);
 
 initial
 begin
-    $readmemh("C:/Users/LB197/Desktop/project_sqrt_test/invsq_pipe_in.tv", testvectors);
-    f = $fopen("C:/Users/LB197/Desktop/project_sqrt_test/invsq_pipe_out.txt","w");
+//    $readmemh("C:/Users/LB197/Desktop/project_sqrt_test/invsq_pipe_in.tv", testvectors);
+//    f = $fopen("C:/Users/LB197/Desktop/project_sqrt_test/invsq_pipe_out.txt","w");
+    $readmemh("invsq_pipe_in.tv", testvectors);
+    f = $fopen("invsq_pipe_out.txt","w");
     vecnum <= 0;
     ce = 0;
     clk <= 1'b1;
